@@ -98,7 +98,7 @@ Does the relationship in @fig-TSG appear to be positive or negative? Does the re
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 1 Answers"}
--   The relationship if @fig-TSG appears to be positive. It looks reasonably linear and am unsure if another fit would align with the data better.
+-   The relationship if @fig-TSG appears to be positive. It looks reasonably linear and I am unsure if another fit would align with the data better.
 :::
 
 ## The Correlation Coefficient (r)
@@ -215,7 +215,7 @@ six_pct_prediction <- get_regression_points(poverty_mod, newdata=tibble(poverty=
 six_pct_prediction
 ```
 
--   At a value of 6% white poverty, I might expect `{r} six_pct_prediction$trump_support_hat`% support for Trump.
+-   At a value of 6% white poverty, I might expect `{r} round(six_pct_prediction$trump_support_hat,1)`% support for Trump.
 :::
 
 ::: {.callout-note icon="false" title="Problem 4"}
@@ -297,13 +297,14 @@ Run a linear regression using `non_white` as the **explanatory** variable, and `
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 7 Answers"}
 ```{r}
-# Type your code and comments inside the code chunk
-
+lm(trump_support~non_white, data=trump) -> nw_mod
+get_regression_table(nw_mod) -> nw_mod_table
+kable(nw_mod_table)
 ```
 
--   Delete this and put your text answer here.
+-   The intercept is estimated to be `{r} nw_mod_table$estimate[1]`% at 0% non-white voters.
 
--   Delete this and put your text answer here.
+-   The slope is estimated to be `{r} nw_mod_table$estimate[2]`% for each percentage increase in non-white voters.
 :::
 
 ::: {.callout-note icon="false" title="Problem 8"}
@@ -312,11 +313,11 @@ Make a numerical prediction for the level of trump support for a region that has
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 8 Answers"}
 ```{r}
-# Type your code and comments inside the code chunk
-
+nw_70 <- predict(nw_mod, newdata=data.frame(non_white=70))
+nw_70
 ```
 
--   Delete this and put your text answer here.
+-   This linear model predicts that there will be a `{r} round(nw_70[1],2)`% level of Trump support for this region.
 :::
 
 ::: {.callout-note icon="false" title="Problem 9"}
@@ -325,11 +326,13 @@ Based on the evidence you have so far (scatterplots and correlation coefficients
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 9 Answers"}
 ```{r}
-# Type your code and comments inside the code chunk
-
+nw_cor <- cor(trump$trump_support, trump$non_white)
+pov_cor <- cor(trump$trump_support, trump$poverty)
+trump |> summarize("Non-white correlation" = nw_cor,
+                   "Poverty correlation" = pov_cor)
+nw_better_expl = abs(nw_cor) > abs(pov_cor)
 ```
-
--   Delete this and put your text answer here.
+-   `{r} if(nw_better_expl){"non_white"} else{"poverty"}` seems to be a more effective explanatory variable than the other. `{r} if(nw_better_expl){"non_white"} else{"poverty"}` has a greater absolute value to its correlation coefficient, standing at `{r} if(nw_better_expl){nw_cor} else{pov_cor}`. Values closer to -1 or 1 represent a stronger correlation, so this value suggests that it's a stronger predictor.
 :::
 
 ::: {.callout-note icon="false" title="Problem 10"}
@@ -344,20 +347,21 @@ If Representative Ocasio-Cortez saw the regression line (`nw_mod`) and not the a
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 10 Answers"}
 ```{r}
-# Type your code and comments inside the code chunk
-
+predict(nw_mod, newdata=data.frame(non_white=61)) -> aoc_predict
+aoc_predict
 ```
 
-**A.** Delete this and put your text answer here.
+**A.** Representative Ocasio-Cortez would predict that **`{r} round(aoc_predict,2)`%** of voters would support Trump in that region.
 
 ```{r}
-# Type your code and comments inside the code chunk
-
+trump |>
+  filter(non_white==61) |>
+  select(non_white, trump_support)
 ```
 
-**B.** Delete this and put your text answer here.
+**B.** Her prediction would be an **overestimate**. In the observed data, the only recorded area with 61% non-white people had 33% support for Trump, which is **`{r} round(33-aoc_predict,2)`% higher** than anticipated.
 
-**C.** Delete this and put your text answer here.
+**C.** In other words, the residual for this prediction is **`{r} round(aoc_predict-33,2)`%`**.
 :::
 
 # Turning in Your Work
