@@ -1,6 +1,6 @@
 ---
 title: "Problem Set 04: Linear Regression"
-author: "Your Name"
+author: "Thomas Dearth"
 date: last-modified
 date-format: "[Last modified on] MMMM DD, YYYY HH:mm:ss zzz"
 format: 
@@ -98,7 +98,7 @@ Does the relationship in @fig-TSG appear to be positive or negative? Does the re
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 1 Answers"}
--   Delete this and put your text answer here.
+-   The relationship if @fig-TSG appears to be positive. It looks reasonably linear and am unsure if another fit would align with the data better.
 :::
 
 ## The Correlation Coefficient (r)
@@ -181,7 +181,7 @@ We found a positive correlation coefficient between `trump_support` and `poverty
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 2 Answers"}
--   Delete this and put your text answer here.
+-   It is not reasonable to assume that white poverty causes an increase in Trump support. We have not proven any causation, only proven that there is correlation. Any number of factors could explain both white poverty and Trump support. Additionally, it could be a complete coincidence.
 :::
 
 ## Making Predictions
@@ -211,11 +211,11 @@ What percent of Trump support would you expect at a value of 6% white poverty?
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 3 Answers"}
 ```{r}
-# Type your code and comments inside the code chunk
-
+six_pct_prediction <- get_regression_points(poverty_mod, newdata=tibble(poverty=6))
+six_pct_prediction
 ```
 
--   Delete this and put your text answer here.
+-   At a value of 6% white poverty, I might expect `{r} six_pct_prediction$trump_support_hat`% support for Trump.
 :::
 
 ::: {.callout-note icon="false" title="Problem 4"}
@@ -223,7 +223,7 @@ Do you think it is a good idea to predict Trump support at 85% white poverty, ba
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 4 Answers"}
--   Delete this and put your text answer here.
+-   I believe that it is unwise to use this model to predict Trump support at 85% white poverty because 85% is a very extreme outlier. The highest percentage of white poverty measured is `{r} max(trump$poverty)`% and it would be unwise to assume that the linear trend continues forever.
 :::
 
 ## Residuals
@@ -269,7 +269,12 @@ Generate a scatterplot with a best-fitting line with `non_white` as the explanat
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 5 Answers"}
 ```{r}
-# Type your code and comments inside the code chunk
+ggplot(trump, aes(x=non_white, y=trump_support)) +
+  geom_point() +
+  labs(x="Percentage of non-white people in each region",
+       y="Percentage of voters who voted for Trump",
+       title="Comparison of 2016 non-white population and Trump voter support") +
+  theme_bw()
 ```
 :::
 
@@ -278,12 +283,12 @@ Do you expect the correlation coefficient (for `non_white` and `trump_support`) 
 :::
 
 ::: {.callout-important icon="false" collapse="false" title="Problem 6 Answers"}
--   Delete this and put your text answer here.
+-   I expect that the correlation coefficient for `non-white` and `trump_support` to be negative due to the points in the plot above being higher on the y-axis when they are farther left on the x-axis.
 
 ```{r}
-# Type your code and comments inside the code chunk
-
+cor(trump$non_white, trump$trump_support) -> non_white_correlation
 ```
+The correlation is `{r} non_white_correlation`, which is `{r} if(non_white_correlation < 0){"negative"} else {"not negative"}`.
 :::
 
 ::: {.callout-note icon="false" title="Problem 7"}
