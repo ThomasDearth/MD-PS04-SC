@@ -359,9 +359,9 @@ trump |>
   select(non_white, trump_support)
 ```
 
-**B.** Her prediction would be an **overestimate**. In the observed data, the only recorded area with 61% non-white people had 33% support for Trump, which is **`{r} round(33-aoc_predict,2)`% higher** than anticipated.
+**B.** Her prediction would be an **overestimate**. In the observed data, the only recorded area with 61% non-white people had 33% support for Trump, which is **`{r} abs(round(33-aoc_predict,2))`% higher** than anticipated.
 
-**C.** In other words, the residual for this prediction is **`{r} round(aoc_predict-33,2)`%`**.
+**C.** In other words, the residual for this prediction is **`{r} round(33-aoc_predict,2)`%**.
 :::
 
 # Turning in Your Work
